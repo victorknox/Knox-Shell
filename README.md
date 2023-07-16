@@ -1,5 +1,31 @@
-# Assignment-4 Operating Systems and Networks (IIIT Hyderabad)
-# Report
+# Knox Shell - Operating Systems and Networks (IIIT Hyderabad)
+
+## Functionality
+- Prompt with username, hostname and directory
+- Basic commands : `cd`, `pwd`, `echo`, `ls`, `repeat`, `pinfo`
+- Ability to run external commands as foreground and background
+
+## Installation
+1. Run `make` to build the executable
+2. Run `make run` or `./vsh` to start the shell
+
+## File structure
+| Functionality |Files |  
+| -- | -- |  
+|Prompt| [prompt.c](src/prompt.c) [prompt.h](src/prompt.h)|  
+|cd, pwd, echo, repeat, jobs, fg, bg, sig, replay | [builtins.c](src/builtins.c) [builtins.h](src/builtins.h)|  
+|ls | [ls.c](src/ls.c) [ls.h](src/ls.h)|  
+|Baywatch | [baywatch.c](src/baywatch.c) [baywatch.h](src/baywatch.h)|
+|Input parser| [parse.c](src/parse.c) [parse.h](src/parse.h)|  
+|External commands|[execute.c](src/execute.c) [execute.h](src/execute.h)|  
+|Background jobs| [jobs.c](src/jobs.c) [jobs.h](src/jobs.h)|  
+|Data structure for commands| [args.c](src/args.c) [args.h](src/args.h)|  
+|Error handling, etc| [utils.c](src/utils.c) [utils.h](src/utils.h)|  
+|History | [history.c](src/history.c) [history.h](src/history.h)|  
+|Up arrow key | [rawio.c](src/rawio.c) [rawio.h](rawio.h)|
+|IO Redirection | [execute.c](src/execute.c) [execute.h](src/execute.h)| 
+|Signal Handling | Handled when process is set as fg in [execute.c](src/execute.c)|
+
 
 # Specification 1: Syscalls
 ## `strace`
@@ -13,7 +39,7 @@ if (p->strace_m & (1 << SYS_sbrk))
   printf("%d: syscall sbrk (%d) -> %d\n", p->pid, n, addr);
 ```
 
-## `sigalarm` (buggy)
+## `sigalarm` 
 `sigalarm()` proceeds by first saving the frequency `n` and the handler `periodic_fn_ptr`, and then saving the trapframe of the calling process. It then acquires the lock of the process, and if its runtime is a multiple of `n`, it changes the instruction pointer of the trapframe to the pointer of the handler.
 
 `sigreturn()`, correspondingly, restores the saved trapframe and increments the instruction pointer so it can continue where it left off.
